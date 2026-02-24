@@ -70,6 +70,137 @@
           <p>Still bending time.</p>
         </div>
       </div>
+
+      <section class="row addons" aria-label="Interactive additions">
+        <div class="card interactive">
+          <h3>Loop Note Generator</h3>
+          <p id="note-text" class="muted">Press to pull a new note.</p>
+          <button class="btn" id="note-btn" type="button">Generate Note</button>
+        </div>
+        <div class="card interactive">
+          <h3>Time Stretch</h3>
+          <p><span id="stretch-hours">8</span> hours per viewing.</p>
+          <input
+            id="stretch-range"
+            type="range"
+            min="1"
+            max="24"
+            value="8"
+            aria-label="Time stretch in hours"
+          />
+          <p id="stretch-line" class="muted">
+            A familiar scene becomes a new sculpture.
+          </p>
+        </div>
+        <div class="card interactive">
+          <h3>Playback Loop</h3>
+          <p class="mono"><span id="loop-time">00:00</span> elapsed</p>
+          <div class="button-row">
+            <button class="btn" id="loop-start" type="button">Start</button>
+            <button class="btn" id="loop-pause" type="button">Pause</button>
+            <button class="btn ghost" id="loop-reset" type="button">Reset</button>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <script>
+      const loopNotes = [
+        "Every frame is a sculpture when time slows down.",
+        "Repetition reveals small differences.",
+        "Silence makes the edit audible.",
+        "The loop changes the viewer as much as the film.",
+        "Duration turns plot into texture.",
+        "Time becomes the real protagonist.",
+      ];
+
+      const noteText = document.getElementById("note-text");
+      const noteBtn = document.getElementById("note-btn");
+
+      const getRandomItem = (items) =>
+        items[Math.floor(Math.random() * items.length)];
+
+      const setNote = () => {
+        noteText.textContent = getRandomItem(loopNotes);
+      };
+
+      noteBtn.addEventListener("click", setNote);
+      setNote();
+
+      const stretchRange = document.getElementById("stretch-range");
+      const stretchHours = document.getElementById("stretch-hours");
+      const stretchLine = document.getElementById("stretch-line");
+
+      const stretchCopy = [
+        { max: 4, text: "Quick tempo, still cinematic." },
+        { max: 8, text: "The familiar drifts into the strange." },
+        { max: 12, text: "Duration starts to reshape memory." },
+        { max: 16, text: "Time stretches, details surface." },
+        { max: 20, text: "Narrative dissolves into texture." },
+        { max: 24, text: "A full-day trance, pure atmosphere." },
+      ];
+
+      const lineForHours = (hours) =>
+        stretchCopy.find((entry) => hours <= entry.max)?.text ||
+        "Time becomes the real medium.";
+
+      const updateStretch = () => {
+        const hours = Number(stretchRange.value);
+        stretchHours.textContent = hours;
+        stretchLine.textContent = lineForHours(hours);
+      };
+
+      stretchRange.addEventListener("input", updateStretch);
+      updateStretch();
+
+      const loopTime = document.getElementById("loop-time");
+      const loopStart = document.getElementById("loop-start");
+      const loopPause = document.getElementById("loop-pause");
+      const loopReset = document.getElementById("loop-reset");
+
+      let elapsedSeconds = 0;
+      let loopTimer = null;
+
+      const formatTime = (totalSeconds) => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+          2,
+          "0"
+        )}`;
+      };
+
+      const renderLoop = () => {
+        loopTime.textContent = formatTime(elapsedSeconds);
+      };
+
+      const tick = () => {
+        elapsedSeconds += 1;
+        renderLoop();
+      };
+
+      const startLoop = () => {
+        if (loopTimer) {
+          return;
+        }
+        loopTimer = setInterval(tick, 1000);
+      };
+
+      const pauseLoop = () => {
+        clearInterval(loopTimer);
+        loopTimer = null;
+      };
+
+      const resetLoop = () => {
+        pauseLoop();
+        elapsedSeconds = 0;
+        renderLoop();
+      };
+
+      loopStart.addEventListener("click", startLoop);
+      loopPause.addEventListener("click", pauseLoop);
+      loopReset.addEventListener("click", resetLoop);
+      renderLoop();
+    </script>
   </body>
 </html>

@@ -123,6 +123,56 @@ h1 {
   background: #fff;
 }
 
+.addons {
+  align-items: stretch;
+}
+
+.interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.muted {
+  color: #5a5a5a;
+}
+
+.mono {
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 1px;
+}
+
+.btn {
+  border: 1.5px solid var(--ink);
+  background: var(--accent);
+  color: #fff;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  background: #b43d22;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
 .card h3 {
   margin: 0 0 6px 0;
 }
